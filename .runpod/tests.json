@@ -1,0 +1,72 @@
+{
+  "tests": [
+    {
+      "name": "Basic chat completion",
+      "input": {
+        "openai_route": "/v1/chat/completions",
+        "openai_input": {
+          "model": "qwen3.6-27b",
+          "messages": [
+            {
+              "role": "user",
+              "content": "Reply with just: OK"
+            }
+          ],
+          "max_tokens": 10,
+          "temperature": 0
+        }
+      },
+      "timeout": 300000
+    },
+    {
+      "name": "Tool calling",
+      "input": {
+        "openai_route": "/v1/chat/completions",
+        "openai_input": {
+          "model": "qwen3.6-27b",
+          "messages": [
+            {
+              "role": "user",
+              "content": "What is the weather in Paris?"
+            }
+          ],
+          "tools": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "description": "Get current weather for a city",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string",
+                      "description": "City name"
+                    }
+                  },
+                  "required": ["city"]
+                }
+              }
+            }
+          ],
+          "tool_choice": "auto",
+          "max_tokens": 200,
+          "temperature": 0
+        }
+      },
+      "timeout": 300000
+    },
+    {
+      "name": "Model listing",
+      "input": {
+        "openai_route": "/v1/models"
+      },
+      "timeout": 60000
+    }
+  ],
+  "config": {
+    "gpuTypeId": "NVIDIA H100 80GB HBM3",
+    "gpuCount": 1,
+    "allowedCudaVersions": ["12.4", "12.5", "12.6", "12.7", "12.8"]
+  }
+}
