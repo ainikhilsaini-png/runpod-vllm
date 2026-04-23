@@ -1,0 +1,132 @@
+{
+  "title": "Qwen3.6-27B FP8 Worker",
+  "description": "vLLM serverless worker for Qwen/Qwen3.6-27B-FP8 with MTP speculative decoding, tool calling (qwen3_coder), and reasoning parser (qwen3). Optimized for agentic coding on a single H100 80GB.",
+  "type": "serverless",
+  "category": "language",
+  "iconUrl": "https://qianwen-res.oss-accelerate.aliyuncs.com/Qwen3.6/logo.png",
+
+  "config": {
+    "runsOn": "GPU",
+    "containerDiskInGb": 60,
+    "gpuCount": 1,
+    "gpuIds": "NVIDIA A100,NVIDIA H100 80GB HBM3,NVIDIA H200,NVIDIA B200",
+    "allowedCudaVersions": ["12.4", "12.5", "12.6", "12.7", "12.8"],
+
+    "presets": [
+      {
+        "name": "Default",
+        "defaults": {
+          "MAX_MODEL_LEN": "131072",
+          "MAX_NUM_SEQS": "16",
+          "GPU_MEMORY_UTILIZATION": "0.92",
+          "KV_CACHE_DTYPE": "fp8_e4m3",
+          "NUM_SPECULATIVE_TOKENS": "1"
+        }
+      },
+      {
+        "name": "Long Context",
+        "defaults": {
+          "MAX_MODEL_LEN": "262144",
+          "MAX_NUM_SEQS": "8",
+          "GPU_MEMORY_UTILIZATION": "0.92",
+          "KV_CACHE_DTYPE": "fp8_e4m3",
+          "NUM_SPECULATIVE_TOKENS": "1"
+        }
+      }
+    ],
+
+    "env": [
+      {
+        "key": "MODEL_NAME",
+        "input": {
+          "name": "Model Name",
+          "type": "string",
+          "description": "HF model repo or local path",
+          "default": "Qwen/Qwen3.6-27B-FP8",
+          "advanced": false
+        }
+      },
+      {
+        "key": "SERVED_MODEL_NAME",
+        "input": {
+          "name": "Served Model Name",
+          "type": "string",
+          "description": "Friendly model name returned in API responses",
+          "default": "qwen3.6-27b",
+          "advanced": false
+        }
+      },
+      {
+        "key": "MAX_MODEL_LEN",
+        "input": {
+          "name": "Max Model Length",
+          "type": "number",
+          "description": "Maximum context length in tokens",
+          "default": 131072,
+          "advanced": false
+        }
+      },
+      {
+        "key": "MAX_NUM_SEQS",
+        "input": {
+          "name": "Max Concurrent Sequences",
+          "type": "number",
+          "description": "Maximum concurrent requests",
+          "default": 16,
+          "advanced": true
+        }
+      },
+      {
+        "key": "GPU_MEMORY_UTILIZATION",
+        "input": {
+          "name": "GPU Memory Utilization",
+          "type": "string",
+          "description": "Fraction of GPU memory vLLM can use (0.0-1.0)",
+          "default": "0.92",
+          "advanced": true
+        }
+      },
+      {
+        "key": "KV_CACHE_DTYPE",
+        "input": {
+          "name": "KV Cache Dtype",
+          "type": "string",
+          "description": "Quantization for KV cache",
+          "default": "fp8_e4m3",
+          "options": ["auto", "fp8", "fp8_e4m3", "fp8_e5m2"],
+          "advanced": true
+        }
+      },
+      {
+        "key": "NUM_SPECULATIVE_TOKENS",
+        "input": {
+          "name": "Speculative Decoding Tokens",
+          "type": "number",
+          "description": "MTP speculation depth (0 to disable)",
+          "default": 1,
+          "advanced": true
+        }
+      },
+      {
+        "key": "TOOL_CALL_PARSER",
+        "input": {
+          "name": "Tool Call Parser",
+          "type": "string",
+          "description": "Parser for model tool calls",
+          "default": "qwen3_coder",
+          "advanced": true
+        }
+      },
+      {
+        "key": "REASONING_PARSER",
+        "input": {
+          "name": "Reasoning Parser",
+          "type": "string",
+          "description": "Parser for model reasoning blocks",
+          "default": "qwen3",
+          "advanced": true
+        }
+      }
+    ]
+  }
+}
