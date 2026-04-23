@@ -1,0 +1,5 @@
+runpod>=1.7.0
+aiohttp>=3.9.0
+vllm>=0.19.0
+hf_transfer>=0.1.0
+runai-model-streamer>=0.4.0
